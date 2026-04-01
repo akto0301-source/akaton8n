@@ -1,0 +1,5 @@
+{
+  "name": "chitu-lot-api",
+  "version": "1.0.0",
+  "main": "api/draw-lot.js"
+}
