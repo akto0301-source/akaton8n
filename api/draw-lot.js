@@ -1110,4 +1110,27 @@ career: "再創高峰",
 wealth: "登峰造極",
 health: "完美無瑕"
 }
-];
+  ]; // <-- 這是 100 支籤陣列結尾的括號
+
+  try {
+    // 隨機抽取邏輯
+    const randomIndex = Math.floor(Math.random() * lots.length);
+    const selectedLot = lots[randomIndex];
+
+    // 回傳給 n8n（這裡的標籤必須是英文，n8n才看得懂！）
+    res.status(200).json({
+      success: true,
+      lotNumber: selectedLot.lotNumber,
+      title: selectedLot.title,
+      poem: selectedLot.poem,
+      story: selectedLot.story,
+      overall: selectedLot.overall,
+      love: selectedLot.love,
+      career: selectedLot.career,
+      wealth: selectedLot.wealth,
+      health: selectedLot.health
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+} // <-- 這是整個檔案最後的括號
