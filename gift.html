@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Akato 回禮</title>
+
+  <style>
+    body {
+      font-family: "Noto Sans TC", sans-serif;
+      background: #fff8f5;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 40px;
+      color: #7d6258;
+    }
+
+    .card {
+      margin: 12px 0;
+      padding: 16px;
+      border-radius: 16px;
+      background: white;
+      cursor: pointer;
+      border: 1px solid #eee;
+      transition: 0.2s;
+    }
+
+    .card.selected {
+      border: 2px solid #b48d77;
+      background: #fff4ef;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 14px 24px;
+      border-radius: 999px;
+      border: none;
+      background: #b48d77;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #ccc;
+    }
+
+    #success {
+      display: none;
+      margin-top: 40px;
+      font-size: 20px;
+      color: #7d6258;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1 id="headline">一份溫暖，已來到你身邊</h1>
+
+  <div id="cards">
+    <div class="card" data-gift="感謝款">感謝有你｜溫暖相伴</div>
+    <div class="card" data-gift="溫暖款">把溫暖｜帶在身邊</div>
+    <div class="card" data-gift="平安款">平安順心</div>
+  </div>
+
+  <button id="submitBtn" disabled>確認送出</button>
+
+  <div id="success">你的心意已送出 💌</div>
+
+  <script>
+    const WEBHOOK_URL = "https://akto.app.n8n.cloud/webhook/gift-select";
+
+    const cards = document.querySelectorAll(".card");
+    const submitBtn = document.getElementById("submitBtn");
+    const success = document.getElementById("success");
+
+    let selectedGift = "";
+
+    cards.forEach(card => {
+      card.addEventListener("click", () => {
+        cards.forEach(c => c.classList.remove("selected"));
+        card.classList.add("selected");
+
+        selectedGift = card.dataset.gift;
+        submitBtn.disabled = false;
+      });
+    });
+
+    async function submitGift() {
+      if (!selectedGift) return;
+
+      submitBtn.disabled = true;
+
+      try {
+        const res = await fetch(WEBHOOK_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            selectedGift: selectedGift
+          })
+        });
+
+        if (!res.ok) throw new Error("錯誤");
+
+        success.style.display = "block";
+      } catch (e) {
+        alert("送出失敗");
+        submitBtn.disabled = false;
+      }
+    }
+
+    submitBtn.addEventListener("click", submitGift);
+
+    // 標題動畫
+    setTimeout(() => {
+      document.getElementById("headline").innerText =
+        "你也可以，把這份心意送回去";
+    }, 1500);
+  </script>
+
+</body>
+</html>
