@@ -68,35 +68,40 @@
       z-index: 0;
     }
 
-    /* 花瓣動畫 CSS 設定 */
+    /* === 優化後的花瓣動畫 CSS === */
     .petal {
       position: fixed;
-      top: -24px;
-      width: 12px;
-      height: 12px;
+      top: -10vh; /* 從畫面頂部外一點開始掉落 */
       background: radial-gradient(circle, #f6d7dc 0%, #f3c1c7 70%);
       border-radius: 50% 50% 50% 0;
-      opacity: 0.5;
-      pointer-events: none;
+      opacity: 0; /* 初始透明度交由 @keyframes 控制 */
+      pointer-events: none; /* 絕對不阻擋任何按鈕點擊 */
       animation: fall linear infinite;
       z-index: 1; /* 確保在背景與主卡片之間 */
     }
 
     @keyframes fall {
       0% {
-        transform: translateY(-24px) rotate(0deg);
+        transform: translate(0, 0) rotate(0deg);
         opacity: 0;
       }
-      12% { opacity: 0.55; }
+      10% {
+        opacity: var(--max-opacity, 0.6);
+      }
+      80% {
+        opacity: var(--max-opacity, 0.6);
+      }
       100% {
-        transform: translateY(110vh) rotate(360deg);
+        /* 使用 CSS 變數實現每片花瓣獨立的左右漂移軌跡與旋轉角度 */
+        transform: translate(var(--drift), 120vh) rotate(var(--spin));
         opacity: 0;
       }
     }
+    /* === 結束優化區塊 === */
 
     .page {
       position: relative;
-      z-index: 2; /* 確保主卡片層級高於花瓣 */
+      z-index: 2;
       width: 100%;
       max-width: var(--max);
       margin: 0 auto;
@@ -1032,20 +1037,48 @@
     let currentText = "";
     let currentLineShareUrl = "";
 
-    // 重新啟用的花瓣生成邏輯
+    // === 優化後的花瓣生成邏輯 ===
     function createPetals() {
-      const count = 8;
+      const count = 25; // 花瓣數量增加至 20~25
 
       for (let i = 0; i < count; i++) {
         const petal = document.createElement("div");
         petal.className = "petal";
+        
+        // 隨機起始水平位置
         petal.style.left = Math.random() * 100 + "vw";
-        petal.style.animationDuration = 7 + Math.random() * 7 + "s";
-        petal.style.animationDelay = Math.random() * 6 + "s";
-        petal.style.transform = `scale(${0.75 + Math.random() * 0.6})`;
+        
+        // 隨機動畫時間 (快慢差異增加，8~20秒間)
+        petal.style.animationDuration = 8 + Math.random() * 12 + "s";
+        
+        // 隨機延遲時間，讓花瓣自然交錯掉落
+        petal.style.animationDelay = Math.random() * 10 + "s";
+        
+        // 隨機大小
+        const scale = 0.5 + Math.random() * 0.8;
+        
+        // 隨機左右漂移幅度 (-15vw 到 15vw)
+        const drift = (Math.random() * 30 - 15) + "vw";
+        
+        // 隨機旋轉角度
+        const spin = (Math.random() * 720 - 360) + "deg";
+        
+        // 隨機透明度上限 (保持柔和質感，最亮不超過 0.7)
+        const maxOpacity = 0.35 + Math.random() * 0.35;
+
+        // 寫入 CSS 變數供 @keyframes 控制動畫
+        petal.style.setProperty('--drift', drift);
+        petal.style.setProperty('--spin', spin);
+        petal.style.setProperty('--max-opacity', maxOpacity);
+        
+        // 設定初始縮放大小
+        petal.style.width = (12 * scale) + "px";
+        petal.style.height = (12 * scale) + "px";
+
         document.body.appendChild(petal);
       }
     }
+    // === 結束優化區塊 ===
 
     function renderOptions() {
       optionList.innerHTML = "";
@@ -1179,7 +1212,6 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-    // 初始化頁面特效與選項
     createPetals();
     renderOptions();
   </script>
