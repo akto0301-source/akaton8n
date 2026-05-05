@@ -51,6 +51,7 @@
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
+      overflow-x: hidden;
     }
 
     body::before {
@@ -64,10 +65,37 @@
         linear-gradient(90deg, rgba(183, 134, 106, 0.03) 1px, transparent 1px);
       background-size: 22px 22px;
       mask-image: linear-gradient(180deg, rgba(0,0,0,.7), transparent 88%);
+      z-index: 0;
+    }
+
+    .petal {
+      position: fixed;
+      top: -24px;
+      width: 12px;
+      height: 12px;
+      background: radial-gradient(circle, #f6d7dc 0%, #f3c1c7 70%);
+      border-radius: 50% 50% 50% 0;
+      opacity: 0.5;
+      pointer-events: none;
+      animation: fall linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-24px) rotate(0deg);
+        opacity: 0;
+      }
+      12% { opacity: 0.55; }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
     }
 
     .page {
       position: relative;
+      z-index: 2;
       width: 100%;
       max-width: var(--max);
       margin: 0 auto;
@@ -796,8 +824,24 @@
         border-radius: 32px;
       }
     }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.72rem;
+      }
+
+      .hero-note {
+        align-items: flex-start;
+      }
+
+      .sticky-bar {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+    }
   </style>
 </head>
+
 <body>
   <main class="page">
     <section class="hero" id="heroSection">
@@ -987,6 +1031,20 @@
     let currentText = "";
     let currentLineShareUrl = "";
 
+    function createPetals() {
+      const count = 8;
+
+      for (let i = 0; i < count; i++) {
+        const petal = document.createElement("div");
+        petal.className = "petal";
+        petal.style.left = Math.random() * 100 + "vw";
+        petal.style.animationDuration = 7 + Math.random() * 7 + "s";
+        petal.style.animationDelay = Math.random() * 6 + "s";
+        petal.style.transform = `scale(${0.75 + Math.random() * 0.6})`;
+        document.body.appendChild(petal);
+      }
+    }
+
     function renderOptions() {
       optionList.innerHTML = "";
 
@@ -1127,6 +1185,7 @@ ${mockFortune.meaning}`;
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
+    createPetals();
     renderOptions();
   </script>
 </body>
