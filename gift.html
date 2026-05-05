@@ -68,16 +68,16 @@
       z-index: 0;
     }
 
-    /* === 優化後的花瓣動畫 CSS === */
+    /* === 花瓣動畫 CSS === */
     .petal {
       position: fixed;
-      top: -10vh; /* 從畫面頂部外一點開始掉落 */
+      top: -10vh; 
       background: radial-gradient(circle, #f6d7dc 0%, #f3c1c7 70%);
       border-radius: 50% 50% 50% 0;
-      opacity: 0; /* 初始透明度交由 @keyframes 控制 */
-      pointer-events: none; /* 絕對不阻擋任何按鈕點擊 */
+      opacity: 0; 
+      pointer-events: none; 
       animation: fall linear infinite;
-      z-index: 1; /* 確保在背景與主卡片之間 */
+      z-index: 1; 
     }
 
     @keyframes fall {
@@ -92,13 +92,11 @@
         opacity: var(--max-opacity, 0.6);
       }
       100% {
-        /* 使用 CSS 變數實現每片花瓣獨立的左右漂移軌跡與旋轉角度 */
         transform: translate(var(--drift), 120vh) rotate(var(--spin));
         opacity: 0;
       }
     }
-    /* === 結束優化區塊 === */
-
+    
     .page {
       position: relative;
       z-index: 2;
@@ -1037,48 +1035,32 @@
     let currentText = "";
     let currentLineShareUrl = "";
 
-    // === 優化後的花瓣生成邏輯 ===
     function createPetals() {
-      const count = 25; // 花瓣數量增加至 20~25
+      const count = 25; 
 
       for (let i = 0; i < count; i++) {
         const petal = document.createElement("div");
         petal.className = "petal";
         
-        // 隨機起始水平位置
         petal.style.left = Math.random() * 100 + "vw";
-        
-        // 隨機動畫時間 (快慢差異增加，8~20秒間)
         petal.style.animationDuration = 8 + Math.random() * 12 + "s";
-        
-        // 隨機延遲時間，讓花瓣自然交錯掉落
         petal.style.animationDelay = Math.random() * 10 + "s";
         
-        // 隨機大小
         const scale = 0.5 + Math.random() * 0.8;
-        
-        // 隨機左右漂移幅度 (-15vw 到 15vw)
         const drift = (Math.random() * 30 - 15) + "vw";
-        
-        // 隨機旋轉角度
         const spin = (Math.random() * 720 - 360) + "deg";
-        
-        // 隨機透明度上限 (保持柔和質感，最亮不超過 0.7)
         const maxOpacity = 0.35 + Math.random() * 0.35;
 
-        // 寫入 CSS 變數供 @keyframes 控制動畫
         petal.style.setProperty('--drift', drift);
         petal.style.setProperty('--spin', spin);
         petal.style.setProperty('--max-opacity', maxOpacity);
         
-        // 設定初始縮放大小
         petal.style.width = (12 * scale) + "px";
         petal.style.height = (12 * scale) + "px";
 
         document.body.appendChild(petal);
       }
     }
-    // === 結束優化區塊 ===
 
     function renderOptions() {
       optionList.innerHTML = "";
@@ -1180,24 +1162,32 @@
       }
     }
 
-    shareBtn.addEventListener("click", () => {
+    // === LINE 原生分享 Fallback 機制 ===
+    function sendLine() {
       const text = buildShareText();
       const encoded = encodeURIComponent(text);
 
-      const lineUrl = `line://msg/text/?${encoded}`;
-      const lineWebUrl = `https://line.me/R/msg/text/?${encoded}`;
+      const appUrl = "line://msg/text/?" + encoded;
+      const webUrl = "https://line.me/R/msg/text/?" + encoded;
+      
       const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
       if (isMobile) {
-        window.location.href = lineUrl;
-        setTimeout(() => {
-          window.location.href = lineWebUrl;
-        }, 900);
-        return;
-      }
+        // 嘗試開 App
+        window.location.href = appUrl;
 
-      showQrModal(lineWebUrl);
-    });
+        // 1 秒後 fallback
+        setTimeout(() => {
+          window.location.href = webUrl;
+        }, 1000);
+      } else {
+        // 電腦版顯示 QR Code
+        showQrModal(webUrl);
+      }
+    }
+
+    // 綁定分享按鈕事件
+    shareBtn.addEventListener("click", sendLine);
 
     restartBtn.addEventListener("click", () => {
       successWrap.classList.add("hidden");
