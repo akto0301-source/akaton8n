@@ -68,6 +68,7 @@
       z-index: 0;
     }
 
+    /* 花瓣動畫 CSS 設定 */
     .petal {
       position: fixed;
       top: -24px;
@@ -78,7 +79,7 @@
       opacity: 0.5;
       pointer-events: none;
       animation: fall linear infinite;
-      z-index: 1;
+      z-index: 1; /* 確保在背景與主卡片之間 */
     }
 
     @keyframes fall {
@@ -95,7 +96,7 @@
 
     .page {
       position: relative;
-      z-index: 2;
+      z-index: 2; /* 確保主卡片層級高於花瓣 */
       width: 100%;
       max-width: var(--max);
       margin: 0 auto;
@@ -1031,6 +1032,7 @@
     let currentText = "";
     let currentLineShareUrl = "";
 
+    // 重新啟用的花瓣生成邏輯
     function createPetals() {
       const count = 8;
 
@@ -1125,15 +1127,7 @@
 
     function buildShareText() {
       const styleName = giftTexts[currentKey].title;
-      return `我想送你一份 Akato 小回禮 💌
-
-款式：${styleName}
-祝福：${currentText}
-
-今日祝福籤：${mockFortune.id}
-${mockFortune.poem}
-
-${mockFortune.meaning}`;
+      return `我想送你一份 Akato 小回禮 💌\n\n款式：${styleName}\n祝福：${currentText}\n\n今日祝福籤：${mockFortune.id}\n${mockFortune.poem}\n\n${mockFortune.meaning}`;
     }
 
     function showQrModal(lineWebUrl) {
@@ -1185,6 +1179,7 @@ ${mockFortune.meaning}`;
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
+    // 初始化頁面特效與選項
     createPetals();
     renderOptions();
   </script>
