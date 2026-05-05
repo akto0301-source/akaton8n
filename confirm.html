@@ -3,188 +3,1207 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>確認送出心意｜Akato 赤兔</title>
+  <title>暖心數位回禮卡｜Akato 赤兔</title>
+  <meta name="description" content="Akato 數位回禮頁，挑選一份溫柔心意，收下祝福，也把暖意分享出去。" />
+  <meta name="theme-color" content="#f6efe8" />
+
   <style>
+    :root {
+      --bg: #f7f0e9;
+      --bg-soft: #fbf7f3;
+      --card: rgba(255,255,255,0.86);
+      --card-strong: rgba(255,255,255,0.95);
+      --ink: #4f4039;
+      --ink-soft: #7a675f;
+      --line: rgba(131,107,94,0.16);
+      --line-strong: rgba(131,107,94,0.28);
+      --accent: #b7866a;
+      --accent-deep: #9f6d53;
+      --accent-soft: #f3e1d4;
+      --success: #6d8b73;
+      --shadow: 0 18px 40px rgba(112,88,76,0.10);
+      --shadow-soft: 0 10px 24px rgba(112,88,76,0.08);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --max: 460px;
+      --line-green: #06c755;
+    }
+
     * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
-      min-height: 100vh;
-      font-family: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-      background: linear-gradient(180deg, #f8f2ec 0%, #f5ede6 100%);
-      color: #4f4039;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 28px 18px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,0.82), transparent 28%),
+        radial-gradient(circle at left 20%, rgba(255,241,233,0.85), transparent 24%),
+        linear-gradient(180deg, #f8f2ec 0%, #f5ede6 45%, #f9f4ef 100%);
+      font-family:
+        "Hiragino Sans",
+        "Noto Sans TC",
+        "PingFang TC",
+        "Microsoft JhengHei",
+        sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
       overflow-x: hidden;
     }
 
-    .petal {
+    body::before {
+      content: "";
       position: fixed;
-      top: -24px;
-      width: 12px;
-      height: 12px;
-      background: radial-gradient(circle, #f6d7dc 0%, #f3c1c7 70%);
-      border-radius: 50% 50% 50% 0;
-      opacity: 0.6;
+      inset: 0;
       pointer-events: none;
-      animation: fall linear infinite;
+      opacity: 0.2;
+      background-image:
+        linear-gradient(rgba(183, 134, 106, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(183, 134, 106, 0.03) 1px, transparent 1px);
+      background-size: 22px 22px;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,.7), transparent 88%);
       z-index: 0;
     }
 
-    @keyframes fall {
-      0% { transform: translateY(-24px) translateX(0) rotate(0deg); opacity: 0; }
-      12% { opacity: 0.65; }
-      100% { transform: translateY(110vh) translateX(42px) rotate(420deg); opacity: 0; }
+    /* === 花瓣動畫 CSS === */
+    .petal {
+      position: fixed;
+      top: -10vh; 
+      background: radial-gradient(circle, #f6d7dc 0%, #f3c1c7 70%);
+      border-radius: 50% 50% 50% 0;
+      opacity: 0; 
+      pointer-events: none; 
+      animation: fall linear infinite;
+      z-index: 1; 
     }
 
-    .card {
+    @keyframes fall {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: var(--max-opacity, 0.6);
+      }
+      80% {
+        opacity: var(--max-opacity, 0.6);
+      }
+      100% {
+        transform: translate(var(--drift), 120vh) rotate(var(--spin));
+        opacity: 0;
+      }
+    }
+    
+    .page {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding:
+        calc(env(safe-area-inset-top, 0px) + 18px)
+        16px
+        calc(env(safe-area-inset-bottom, 0px) + 120px);
+      min-height: 100vh;
+    }
+
+    .hero,
+    .section,
+    .success-card,
+    .fortune-card {
+      animation: fadeUp .7s ease both;
+    }
+
+    .hero {
+      position: relative;
+      padding: 22px 18px 18px;
+      border: 1px solid rgba(255,255,255,0.65);
+      border-radius: 30px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,250,246,0.75)),
+        var(--card);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -42px;
+      right: -30px;
+      width: 150px;
+      height: 150px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(243,225,212,0.95), rgba(243,225,212,0));
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      left: -42px;
+      bottom: -48px;
+      width: 120px;
+      height: 120px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(255,255,255,0.88), rgba(255,255,255,0));
+    }
+
+    .brand-row {
       position: relative;
       z-index: 1;
-      width: 100%;
-      max-width: 430px;
-      background: rgba(255,255,255,0.92);
-      border-radius: 30px;
-      padding: 34px 24px 26px;
-      box-shadow: 0 18px 42px rgba(112,88,76,0.12);
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
     }
 
-    .seal {
-      width: 58px;
-      height: 58px;
-      margin: 0 auto 18px;
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-seal {
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #fff8f2, #ead4c4 58%, #c9967a 100%);
+      background:
+        radial-gradient(circle at 30% 30%, #fdf5ef 0%, #e9d2c2 48%, #c9967a 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.72),
+        0 8px 18px rgba(183,134,106,.20);
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .brand-seal::after {
+      content: "禮";
+      position: absolute;
+      inset: 0;
       display: grid;
       place-items: center;
-      font-size: 26px;
-      box-shadow: 0 10px 24px rgba(183,134,106,0.18);
+      color: rgba(111,73,55,.82);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: .08em;
+    }
+
+    .brand-name {
+      font-size: .95rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .brand-sub {
+      margin-top: 2px;
+      font-size: .77rem;
+      color: var(--ink-soft);
+      letter-spacing: .08em;
+    }
+
+    .trust-chip {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      white-space: nowrap;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(183,134,106,0.18);
+      color: var(--ink-soft);
+      font-size: .74rem;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .trust-chip::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #d39a7b;
+      box-shadow: 0 0 0 4px rgba(211,154,123,0.14);
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+      padding-top: 4px;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--accent-deep);
+      font-size: .8rem;
+      letter-spacing: .14em;
     }
 
     h1 {
       margin: 0;
-      font-size: 1.55rem;
-      line-height: 1.45;
-      letter-spacing: .03em;
+      font-size: 1.9rem;
+      line-height: 1.26;
+      letter-spacing: .02em;
+      color: var(--ink);
+      font-weight: 700;
     }
 
-    p {
-      margin: 16px 0 0;
-      color: #7a675f;
-      font-size: 1rem;
-      line-height: 1.8;
+    .hero-lead {
+      margin: 14px 0 0;
+      font-size: .98rem;
+      color: var(--ink-soft);
     }
 
-    .note {
-      margin-top: 18px;
-      padding: 14px;
-      border-radius: 18px;
-      background: #faf4ef;
-      color: #7a675f;
-      font-size: .92rem;
-      line-height: 1.7;
+    .hero-note {
+      margin-top: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(250,242,237,0.9);
+      color: var(--ink-soft);
+      font-size: .86rem;
+      border: 1px solid rgba(183,134,106,0.12);
     }
 
-    .buttons {
-      margin-top: 26px;
+    .hero-note strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .section {
+      margin-top: 16px;
+      padding: 18px;
+      border-radius: var(--radius-xl);
+      background: var(--card-strong);
+      border: 1px solid rgba(255,255,255,0.75);
+      box-shadow: var(--shadow-soft);
+      animation-delay: .08s;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 1.08rem;
+      color: var(--ink);
+      letter-spacing: .02em;
+    }
+
+    .section-desc {
+      margin: 6px 0 0;
+      font-size: .9rem;
+      color: var(--ink-soft);
+    }
+
+    .cards {
+      margin-top: 14px;
       display: grid;
       gap: 12px;
     }
 
-    button {
+    .option {
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      appearance: none;
+      -webkit-tap-highlight-color: transparent;
+      cursor: pointer;
+    }
+
+    .option-card {
+      position: relative;
+      overflow: hidden;
+      padding: 16px 16px 15px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,249,244,0.93));
+      box-shadow: 0 8px 20px rgba(132,106,91,0.06);
+      transition:
+        transform .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+    }
+
+    .option-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -25px -48px auto;
+      width: 110px;
+      height: 110px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(244,225,213,0.92), rgba(244,225,213,0));
+      pointer-events: none;
+    }
+
+    .option:active .option-card {
+      transform: scale(.99);
+    }
+
+    .option.selected .option-card {
+      border-color: rgba(183,134,106,0.60);
+      background:
+        linear-gradient(180deg, rgba(255,249,246,1), rgba(252,241,233,0.96));
+      box-shadow:
+        0 16px 28px rgba(183,134,106,0.14),
+        0 0 0 4px rgba(183,134,106,0.08);
+    }
+
+    .option-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .option-title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .option-tag {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(183,134,106,0.10);
+      color: var(--accent-deep);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+    }
+
+    .option-desc {
+      margin: 7px 0 0;
+      font-size: .88rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+      max-width: 92%;
+    }
+
+    .preview {
+      margin-top: 14px;
+      padding: 18px 16px;
+      border-radius: 20px;
+      border: 1px dashed rgba(183,134,106,0.34);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.92), rgba(252,248,245,0.9));
+    }
+
+    .preview-label {
+      font-size: .8rem;
+      color: var(--accent-deep);
+      letter-spacing: .14em;
+      margin-bottom: 10px;
+    }
+
+    .preview-text {
+      min-height: 92px;
+      color: var(--ink);
+      font-size: 1rem;
+      line-height: 1.85;
+      letter-spacing: .03em;
+      white-space: pre-line;
+    }
+
+    .preview-actions {
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn-ghost {
+      border: 1px solid rgba(183,134,106,0.22);
+      background: rgba(255,255,255,0.75);
+      color: var(--ink-soft);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: .85rem;
+      cursor: pointer;
+    }
+
+    .price-card {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 22px;
+      background:
+        linear-gradient(135deg, rgba(255,251,248,0.98), rgba(246,236,227,0.88));
+      border: 1px solid rgba(183,134,106,0.16);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .price-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .price-title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .price-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .78rem;
+      color: var(--accent-deep);
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(183,134,106,0.12);
+      padding: 7px 10px;
+      border-radius: 999px;
+    }
+
+    .price-row {
+      margin-top: 10px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .price-main {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .currency {
+      color: var(--accent-deep);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .amount {
+      color: var(--accent-deep);
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .price-note {
+      color: var(--ink-soft);
+      font-size: .86rem;
+      text-align: right;
+    }
+
+    .safe-note {
+      margin-top: 12px;
+      font-size: .82rem;
+      color: var(--ink-soft);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .safe-note::before {
+      content: "🔒";
+      flex: 0 0 auto;
+    }
+
+    .sticky-bar {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: min(100%, var(--max));
+      padding: 12px 16px calc(env(safe-area-inset-bottom, 0px) + 16px);
+      z-index: 50;
+      pointer-events: none;
+    }
+
+    .sticky-inner {
+      pointer-events: auto;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 -10px 30px rgba(105,83,72,0.12);
+      backdrop-filter: blur(16px);
+      padding: 14px;
+    }
+
+    .cta-note {
+      margin: 0 0 10px;
+      font-size: .8rem;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    .btn-primary,
+    .btn-line,
+    .btn-secondary {
       width: 100%;
       border: 0;
       border-radius: 999px;
       padding: 16px 18px;
       font-size: 1rem;
       font-weight: 700;
+      letter-spacing: .03em;
       cursor: pointer;
+      transition: transform .18s ease, opacity .18s ease, box-shadow .18s ease;
     }
 
-    .primary {
-      background: linear-gradient(180deg, #15d162, #06c755);
+    .btn-primary {
+      background: linear-gradient(180deg, #c79476, #b68061);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(183,134,106,0.26);
+    }
+
+    .btn-primary[disabled] {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .btn-line {
+      background: linear-gradient(180deg, #15d162, var(--line-green));
       color: #fff;
       box-shadow: 0 12px 24px rgba(6,199,85,0.22);
     }
 
-    .secondary {
-      background: #fff;
-      color: #7a675f;
-      border: 1px solid rgba(183,134,106,0.18);
+    .btn-secondary {
+      margin-top: 12px;
+      background: rgba(255,255,255,0.84);
+      color: var(--ink-soft);
+      border: 1px solid rgba(183,134,106,0.16);
     }
 
-    .brand {
-      margin-top: 22px;
-      font-size: .76rem;
-      color: #9a8a82;
+    .btn-primary:active,
+    .btn-line:active,
+    .btn-secondary:active {
+      transform: scale(.99);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .success-wrap {
+      margin-top: 16px;
+      padding-bottom: 8px;
+    }
+
+    .success-card,
+    .fortune-card {
+      padding: 18px;
+      border-radius: var(--radius-xl);
+      background: var(--card-strong);
+      border: 1px solid rgba(255,255,255,0.75);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .success-card {
+      text-align: center;
+    }
+
+    .success-icon {
+      width: 62px;
+      height: 62px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 30%, #ffffff, #f1e4d9 58%, #dfb89f 100%);
+      display: grid;
+      place-items: center;
+      color: var(--success);
+      font-size: 1.8rem;
+      box-shadow: 0 12px 24px rgba(183,134,106,0.18);
+    }
+
+    .success-title {
+      margin: 0;
+      font-size: 1.35rem;
+      color: var(--ink);
+    }
+
+    .success-desc {
+      margin: 8px 0 0;
+      font-size: .95rem;
+      color: var(--ink-soft);
+    }
+
+    .receipt {
+      margin-top: 16px;
+      text-align: left;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(250,245,241,0.82);
+      border: 1px dashed rgba(183,134,106,0.34);
+    }
+
+    .receipt-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0;
+      font-size: .92rem;
+      color: var(--ink-soft);
+    }
+
+    .receipt-row + .receipt-row {
+      border-top: 1px solid rgba(183,134,106,0.08);
+    }
+
+    .receipt-row strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .fortune-card {
+      margin-top: 14px;
+      text-align: center;
+    }
+
+    .fortune-label {
+      margin: 0;
+      color: var(--accent-deep);
+      font-size: .82rem;
+      letter-spacing: .16em;
+    }
+
+    .fortune-id {
+      margin: 10px 0 0;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--ink);
       letter-spacing: .08em;
+    }
+
+    .fortune-poem {
+      margin: 16px 0 0;
+      font-size: 1rem;
+      line-height: 1.9;
+      color: var(--ink);
+      white-space: pre-line;
+      letter-spacing: .08em;
+    }
+
+    .fortune-meaning {
+      margin: 16px 0 0;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(247,241,236,0.9);
+      color: var(--ink-soft);
+      font-size: .9rem;
+      line-height: 1.7;
+      text-align: left;
+    }
+
+    .share-intro {
+      margin: 18px 0 10px;
+      text-align: center;
+      font-size: .92rem;
+      color: var(--ink-soft);
+    }
+
+    .loading-dot {
+      display: inline-flex;
+      gap: 4px;
+      margin-left: 6px;
+    }
+
+    .loading-dot span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      animation: blink 1s infinite ease-in-out;
+    }
+
+    .loading-dot span:nth-child(2) { animation-delay: .12s; }
+    .loading-dot span:nth-child(3) { animation-delay: .24s; }
+
+    .qr-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+    }
+
+    .qr-modal.hidden {
+      display: none;
+    }
+
+    .qr-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(4px);
+    }
+
+    .qr-dialog {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: calc(100% - 32px);
+      max-width: 380px;
+      background: #fff;
+      border-radius: 24px;
+      padding: 22px 18px 18px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+      text-align: center;
+    }
+
+    .qr-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      border: 0;
+      background: transparent;
+      font-size: 28px;
+      color: #8c7a72;
+      cursor: pointer;
+    }
+
+    .qr-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .qr-desc {
+      font-size: 14px;
+      color: var(--ink-soft);
+      margin-bottom: 16px;
       line-height: 1.6;
+    }
+
+    .qr-box {
+      background: #faf7f3;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .qr-box img {
+      width: 220px;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    @keyframes blink {
+      0%, 80%, 100% { opacity: .35; transform: translateY(0); }
+      40% { opacity: 1; transform: translateY(-1px); }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (min-width: 768px) {
+      body {
+        padding: 24px 0;
+      }
+
+      .page {
+        min-height: calc(100vh - 48px);
+        border-radius: 32px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.72rem;
+      }
+
+      .hero-note {
+        align-items: flex-start;
+      }
+
+      .sticky-bar {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="card">
-    <div class="seal">💌</div>
+  <main class="page">
+    <section class="hero" id="heroSection">
+      <div class="brand-row">
+        <div class="brand-mark">
+          <div class="brand-seal"></div>
+          <div>
+            <div class="brand-name">AKATO</div>
+            <div class="brand-sub">赤兔．數位暖心回禮</div>
+          </div>
+        </div>
+        <div class="trust-chip">安心送出</div>
+      </div>
 
-    <h1>你準備把這份心意<br />送回去了 🌸</h1>
+      <div class="hero-copy">
+        <p class="eyebrow">一份溫柔心意，送回給你</p>
+        <h1>暖心數位回禮卡｜NT$49</h1>
+        <p class="hero-lead">
+          收到一份祝福，也值得送回一份溫柔。
+          只要銅板價，就能把心意體面地送出去。
+        </p>
+        <div class="hero-note">
+          <strong>Akato 小回禮</strong>
+          <span>挑一種風格，搭配一句祝福，再附上一支今日好籤。</span>
+        </div>
+      </div>
+    </section>
 
-    <p>
-      對方會收到一份專屬祝福，<br />
-      就像剛剛你收到的那樣。
-    </p>
+    <section class="section" id="productSection">
+      <h2 class="section-title">請選一種回禮風格</h2>
+      <p class="section-desc">每一種都適合不同情境，先選你最想傳遞的感覺。</p>
 
-    <div class="note">
-      按下確認後，會開啟 LINE。<br />
-      第一次使用可能需要登入 LINE。
+      <div class="cards" id="optionList"></div>
+
+      <div class="preview">
+        <div class="preview-label">文字預覽</div>
+        <div class="preview-text" id="previewText">請先選一個回禮款式</div>
+        <div class="preview-actions">
+          <button class="btn-ghost" type="button" id="refreshBtn">換一句看看</button>
+        </div>
+      </div>
+
+      <div class="price-card">
+        <div class="price-top">
+          <h3 class="price-title">今日體驗價</h3>
+          <div class="price-badge">限時 NT$49</div>
+        </div>
+        <div class="price-row">
+          <div class="price-main">
+            <span class="currency">NT$</span>
+            <span class="amount">49</span>
+          </div>
+          <div class="price-note">
+            內含回禮文字、<br />祝福籤、分享頁
+          </div>
+        </div>
+        <div class="safe-note">Akato 嚴選內容・手機即時開啟・分享方便</div>
+      </div>
+    </section>
+
+    <section class="success-wrap hidden" id="successWrap">
+      <div class="success-card">
+        <div class="success-icon">✓</div>
+        <h2 class="success-title">你的心意已準備好了</h2>
+        <p class="success-desc">
+          一份溫柔回禮，已經替你整理完成。<br />
+          現在可以直接分享給對方。
+        </p>
+
+        <div class="receipt">
+          <div class="receipt-row"><span>商品</span><strong>暖心數位回禮卡</strong></div>
+          <div class="receipt-row"><span>款式</span><strong id="receiptStyle">—</strong></div>
+          <div class="receipt-row"><span>訂單編號</span><strong id="receiptId">AK-000000</strong></div>
+          <div class="receipt-row"><span>金額</span><strong>NT$49</strong></div>
+        </div>
+      </div>
+
+      <div class="fortune-card">
+        <p class="fortune-label">今日祝福籤</p>
+        <div class="fortune-id" id="fortuneId">第18籤｜吉</div>
+        <div class="fortune-poem" id="fortunePoem"></div>
+        <div class="fortune-meaning" id="fortuneMeaning"></div>
+      </div>
+
+      <p class="share-intro">把這份回禮與祝福，一起送到對方手上。</p>
+      <button class="btn-line" type="button" id="shareBtn">用 LINE 傳送給他</button>
+      <button class="btn-secondary" type="button" id="restartBtn">再製作一份回禮</button>
+    </section>
+  </main>
+
+  <div class="sticky-bar" id="stickyBar">
+    <div class="sticky-inner">
+      <p class="cta-note">選好後立即製作你的暖心回禮</p>
+      <button class="btn-primary" type="button" id="buyBtn" disabled>
+        <span id="buyBtnText">立即製作暖心回禮 NT$49</span>
+      </button>
     </div>
+  </div>
 
-    <div class="buttons">
-      <button class="primary" onclick="sendLine()">確認用 LINE 傳送</button>
-      <button class="secondary" onclick="history.back()">我再看看</button>
-    </div>
-
-    <div class="brand">
-      Akato 赤兔祝福館<br />
-      by 山腳貓綠光森林創意工坊
+  <div id="qrModal" class="qr-modal hidden">
+    <div class="qr-backdrop" onclick="closeQrModal()"></div>
+    <div class="qr-dialog">
+      <button class="qr-close" onclick="closeQrModal()">×</button>
+      <div class="qr-title">請用 LINE 掃描 QR Code</div>
+      <div class="qr-desc">電腦版可用手機 LINE 掃碼後傳送給對方</div>
+      <div class="qr-box">
+        <img id="qrImage" src="" alt="LINE 分享 QR Code" />
+      </div>
+      <button class="btn-line" type="button" onclick="openLineSharePage()">前往 LINE 分享頁</button>
     </div>
   </div>
 
   <script>
+    const giftTexts = {
+      femaleWarmTexts: {
+        title: "女性暖心款",
+        tag: "溫柔日常",
+        desc: "致閨蜜與知己，如微風般的溫柔問候。",
+        texts: [
+          "這份小小心意，願為妳帶來一整天的好心情。",
+          "忙碌的日子裡，也別忘了好好疼愛自己。",
+          "願妳的每一天，都有溫柔與光亮悄悄降臨。",
+          "送妳一份輕柔祝福，謝謝妳一直都那麼溫暖。",
+          "願妳被這個世界溫柔以待，也被自己好好珍惜。"
+        ]
+      },
+      ancientTexts: {
+        title: "古風雅意款",
+        tag: "詩意典雅",
+        desc: "致長輩或氣質出眾的她，詩意而雅緻的祝願。",
+        texts: [
+          "願君多采擷，此物最相思。",
+          "山河遠闊，人間煙火，皆是溫柔相待。",
+          "願有歲月可回首，且以深情共白頭。",
+          "歲月靜好，現世安穩，所念皆如願。",
+          "與君初相識，猶如故人歸。"
+        ]
+      },
+      thanksTexts: {
+        title: "感謝回禮款",
+        tag: "誠摯致謝",
+        desc: "致職場貴人，得體不失溫度的誠摯謝意。",
+        texts: [
+          "由衷感謝您的照顧與支持，這份心意代表我深深的謝意。",
+          "一點小小回禮，不足以表達我的感激之情。",
+          "承蒙厚意，銘感在心，願這份心意為您帶來暖意。",
+          "謝謝您在重要時刻伸出援手，這份祝福敬請收下。",
+          "感恩相遇，也謝謝一路上有您的提攜。"
+        ]
+      },
+      flowerTexts: {
+        title: "收花回禮款",
+        tag: "花香延續",
+        desc: "專為收到實體花禮設計，延續花香的浪漫回應。",
+        texts: [
+          "謝謝妳送來的花，也願妳的日子如花般明亮盛開。",
+          "花開有時，心意長存，這份回禮替我向妳問候。",
+          "這份花香很美，也想把溫柔輕輕送回給妳。",
+          "讓這份暖意延續，像花瓣一樣悄悄落進心裡。",
+          "看見花，就想起妳的溫柔與用心，謝謝妳。"
+        ]
+      }
+    };
+
+    const mockFortune = {
+      id: "第18籤｜吉",
+      poem: "春風輕拂柳絲長\n好運隨之降身旁\n靜心等待佳音至\n喜事連連樂無疆",
+      meaning: "柔韌如柳，你的耐心與溫柔，將迎來溫暖的回報。"
+    };
+
+    const optionList = document.getElementById("optionList");
+    const previewText = document.getElementById("previewText");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const buyBtn = document.getElementById("buyBtn");
+    const buyBtnText = document.getElementById("buyBtnText");
+    const stickyBar = document.getElementById("stickyBar");
+    const successWrap = document.getElementById("successWrap");
+    const receiptStyle = document.getElementById("receiptStyle");
+    const receiptId = document.getElementById("receiptId");
+    const fortuneId = document.getElementById("fortuneId");
+    const fortunePoem = document.getElementById("fortunePoem");
+    const fortuneMeaning = document.getElementById("fortuneMeaning");
+    const shareBtn = document.getElementById("shareBtn");
+    const restartBtn = document.getElementById("restartBtn");
+
+    let currentKey = "";
+    let currentText = "";
+    let currentLineShareUrl = "";
+
     function createPetals() {
-      for (let i = 0; i < 22; i++) {
+      const count = 25; 
+
+      for (let i = 0; i < count; i++) {
         const petal = document.createElement("div");
         petal.className = "petal";
+        
         petal.style.left = Math.random() * 100 + "vw";
-        petal.style.animationDuration = 6 + Math.random() * 8 + "s";
-        petal.style.animationDelay = Math.random() * 6 + "s";
-        petal.style.transform = `scale(${0.55 + Math.random() * 0.7})`;
+        petal.style.animationDuration = 8 + Math.random() * 12 + "s";
+        petal.style.animationDelay = Math.random() * 10 + "s";
+        
+        const scale = 0.5 + Math.random() * 0.8;
+        const drift = (Math.random() * 30 - 15) + "vw";
+        const spin = (Math.random() * 720 - 360) + "deg";
+        const maxOpacity = 0.35 + Math.random() * 0.35;
+
+        petal.style.setProperty('--drift', drift);
+        petal.style.setProperty('--spin', spin);
+        petal.style.setProperty('--max-opacity', maxOpacity);
+        
+        petal.style.width = (12 * scale) + "px";
+        petal.style.height = (12 * scale) + "px";
+
         document.body.appendChild(petal);
       }
     }
 
-    function sendLine() {
-      const text = encodeURIComponent(
-        "我想送你一份 Akato 小回禮 💌\n\n願你今天被溫柔對待，所有美好都剛好發生。\n\n點開收下這份心意：\nhttps://akaton8n.vercel.app/index.html"
-      );
+    function renderOptions() {
+      optionList.innerHTML = "";
 
-      const lineUrl = "line://msg/text/?" + text;
-      const lineWebUrl = "https://line.me/R/msg/text/?" + text;
-      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      Object.entries(giftTexts).forEach(([key, item]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "option";
+        button.innerHTML = `
+          <div class="option-card">
+            <div class="option-header">
+              <h3 class="option-title">${item.title}</h3>
+              <span class="option-tag">${item.tag}</span>
+            </div>
+            <p class="option-desc">${item.desc}</p>
+          </div>
+        `;
+        button.addEventListener("click", () => selectOption(key, button));
+        optionList.appendChild(button);
+      });
+    }
 
-      if (isMobile) {
-        window.location.href = lineUrl;
-        setTimeout(() => {
-          window.location.href = lineWebUrl;
-        }, 900);
-      } else {
-        window.location.href = lineWebUrl;
+    function randomText(key) {
+      const texts = giftTexts[key].texts;
+      if (!texts || !texts.length) return "";
+      let next = texts[Math.floor(Math.random() * texts.length)];
+      if (texts.length > 1) {
+        while (next === currentText) {
+          next = texts[Math.floor(Math.random() * texts.length)];
+        }
+      }
+      currentText = next;
+      return next;
+    }
+
+    function selectOption(key, button) {
+      currentKey = key;
+      document.querySelectorAll(".option").forEach(el => el.classList.remove("selected"));
+      button.classList.add("selected");
+      previewText.textContent = randomText(key);
+      buyBtn.disabled = false;
+    }
+
+    refreshBtn.addEventListener("click", () => {
+      if (!currentKey) return;
+      previewText.textContent = randomText(currentKey);
+    });
+
+    function createOrderId() {
+      return "AK-" + Math.floor(100000 + Math.random() * 900000);
+    }
+
+    function showSuccess() {
+      const styleName = giftTexts[currentKey].title;
+      receiptStyle.textContent = styleName;
+      receiptId.textContent = createOrderId();
+      fortuneId.textContent = mockFortune.id;
+      fortunePoem.textContent = mockFortune.poem;
+      fortuneMeaning.textContent = "👉 " + mockFortune.meaning;
+
+      successWrap.classList.remove("hidden");
+      stickyBar.classList.add("hidden");
+      document.getElementById("productSection").classList.add("hidden");
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    buyBtn.addEventListener("click", () => {
+      if (!currentKey) return;
+      buyBtn.disabled = true;
+      buyBtnText.innerHTML = `製作中<span class="loading-dot"><span></span><span></span><span></span></span>`;
+
+      setTimeout(() => {
+        showSuccess();
+        buyBtnText.textContent = "立即製作暖心回禮 NT$49";
+        buyBtn.disabled = false;
+      }, 1200);
+    });
+
+    function buildShareText() {
+      const styleName = giftTexts[currentKey].title;
+      return `我想送你一份 Akato 小回禮 💌\n\n款式：${styleName}\n祝福：${currentText}\n\n今日祝福籤：${mockFortune.id}\n${mockFortune.poem}\n\n${mockFortune.meaning}`;
+    }
+
+    function showQrModal(lineWebUrl) {
+      currentLineShareUrl = lineWebUrl;
+      const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(lineWebUrl)}`;
+      document.getElementById("qrImage").src = qrApi;
+      document.getElementById("qrModal").classList.remove("hidden");
+    }
+
+    function closeQrModal() {
+      document.getElementById("qrModal").classList.add("hidden");
+    }
+
+    function openLineSharePage() {
+      if (currentLineShareUrl) {
+        window.open(currentLineShareUrl, "_blank", "noopener,noreferrer");
       }
     }
 
+    // === LINE 原生分享 Fallback 機制 ===
+    function sendLine() {
+      const text = buildShareText();
+      const encoded = encodeURIComponent(text);
+
+      const appUrl = "line://msg/text/?" + encoded;
+      const webUrl = "https://line.me/R/msg/text/?" + encoded;
+      
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+      if (isMobile) {
+        // 嘗試開 App
+        window.location.href = appUrl;
+
+        // 1 秒後 fallback
+        setTimeout(() => {
+          window.location.href = webUrl;
+        }, 1000);
+      } else {
+        // 電腦版顯示 QR Code
+        showQrModal(webUrl);
+      }
+    }
+
+    // 綁定分享按鈕事件
+    shareBtn.addEventListener("click", sendLine);
+
+    restartBtn.addEventListener("click", () => {
+      successWrap.classList.add("hidden");
+      stickyBar.classList.remove("hidden");
+      document.getElementById("productSection").classList.remove("hidden");
+      document.querySelectorAll(".option").forEach(el => el.classList.remove("selected"));
+      previewText.textContent = "請先選一個回禮款式";
+      currentKey = "";
+      currentText = "";
+      buyBtn.disabled = true;
+      closeQrModal();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
     createPetals();
+    renderOptions();
   </script>
 </body>
 </html>
