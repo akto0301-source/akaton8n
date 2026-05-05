@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>確認送出心意｜Akato 赤兔</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background: linear-gradient(180deg, #f8f2ec 0%, #f5ede6 100%);
+      color: #4f4039;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 18px;
+      overflow-x: hidden;
+    }
+
+    .petal {
+      position: fixed;
+      top: -24px;
+      width: 12px;
+      height: 12px;
+      background: radial-gradient(circle, #f6d7dc 0%, #f3c1c7 70%);
+      border-radius: 50% 50% 50% 0;
+      opacity: 0.6;
+      pointer-events: none;
+      animation: fall linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-24px) translateX(0) rotate(0deg); opacity: 0; }
+      12% { opacity: 0.65; }
+      100% { transform: translateY(110vh) translateX(42px) rotate(420deg); opacity: 0; }
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 430px;
+      background: rgba(255,255,255,0.92);
+      border-radius: 30px;
+      padding: 34px 24px 26px;
+      box-shadow: 0 18px 42px rgba(112,88,76,0.12);
+      text-align: center;
+    }
+
+    .seal {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fff8f2, #ead4c4 58%, #c9967a 100%);
+      display: grid;
+      place-items: center;
+      font-size: 26px;
+      box-shadow: 0 10px 24px rgba(183,134,106,0.18);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.55rem;
+      line-height: 1.45;
+      letter-spacing: .03em;
+    }
+
+    p {
+      margin: 16px 0 0;
+      color: #7a675f;
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .note {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 18px;
+      background: #faf4ef;
+      color: #7a675f;
+      font-size: .92rem;
+      line-height: 1.7;
+    }
+
+    .buttons {
+      margin-top: 26px;
+      display: grid;
+      gap: 12px;
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 999px;
+      padding: 16px 18px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: linear-gradient(180deg, #15d162, #06c755);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(6,199,85,0.22);
+    }
+
+    .secondary {
+      background: #fff;
+      color: #7a675f;
+      border: 1px solid rgba(183,134,106,0.18);
+    }
+
+    .brand {
+      margin-top: 22px;
+      font-size: .76rem;
+      color: #9a8a82;
+      letter-spacing: .08em;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="seal">💌</div>
+
+    <h1>你準備把這份心意<br />送回去了 🌸</h1>
+
+    <p>
+      對方會收到一份專屬祝福，<br />
+      就像剛剛你收到的那樣。
+    </p>
+
+    <div class="note">
+      按下確認後，會開啟 LINE。<br />
+      第一次使用可能需要登入 LINE。
+    </div>
+
+    <div class="buttons">
+      <button class="primary" onclick="sendLine()">確認用 LINE 傳送</button>
+      <button class="secondary" onclick="history.back()">我再看看</button>
+    </div>
+
+    <div class="brand">
+      Akato 赤兔祝福館<br />
+      by 山腳貓綠光森林創意工坊
+    </div>
+  </div>
+
+  <script>
+    function createPetals() {
+      for (let i = 0; i < 22; i++) {
+        const petal = document.createElement("div");
+        petal.className = "petal";
+        petal.style.left = Math.random() * 100 + "vw";
+        petal.style.animationDuration = 6 + Math.random() * 8 + "s";
+        petal.style.animationDelay = Math.random() * 6 + "s";
+        petal.style.transform = `scale(${0.55 + Math.random() * 0.7})`;
+        document.body.appendChild(petal);
+      }
+    }
+
+    function sendLine() {
+      const text = encodeURIComponent(
+        "我想送你一份 Akato 小回禮 💌\n\n願你今天被溫柔對待，所有美好都剛好發生。\n\n點開收下這份心意：\nhttps://akaton8n.vercel.app/index.html"
+      );
+
+      const lineUrl = "line://msg/text/?" + text;
+      const lineWebUrl = "https://line.me/R/msg/text/?" + text;
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+      if (isMobile) {
+        window.location.href = lineUrl;
+        setTimeout(() => {
+          window.location.href = lineWebUrl;
+        }, 900);
+      } else {
+        window.location.href = lineWebUrl;
+      }
+    }
+
+    createPetals();
+  </script>
+</body>
+</html>
